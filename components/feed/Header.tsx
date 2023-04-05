@@ -26,12 +26,14 @@ const Username = styled.p`
   font-weight: bold;
 `;
 
-export function Header({ user }: { user: { name: string; avatar: string } }) {
+export function Header({ username }: { username: string }) {
+  const avatar = `http://localhost:8000/avatar/${username}`;
+
   return (
     <HeaderWrapper>
       <UserWrapper>
-        <UserAvatar src={user.avatar} alt="user avatar" />
-        <Username>{user.name}</Username>
+        <UserAvatar src={avatar} alt="user avatar" />
+        <Username>{username}</Username>
       </UserWrapper>
       <div style={{ width: 12, height: 12, backgroundColor: "red" }}></div>
     </HeaderWrapper>

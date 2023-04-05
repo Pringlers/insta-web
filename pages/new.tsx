@@ -96,7 +96,7 @@ const RegisterLink = styled.a`
 export default function Login() {
   const router = useRouter();
 
-  const [cookies, setCookies] = useCookies(["session"]);
+  const [cookies] = useCookies(["session"]);
 
   const [username, setUsername] = useState<string | null>(null);
   const onUsernameChange = (e: FormEvent<HTMLInputElement>) => setUsername(e.currentTarget.value);
@@ -114,20 +114,15 @@ export default function Login() {
   const onSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:8000/login", {
+    const response = await fetch("http://localhost:8000/users", {
       method: "POST",
       body: JSON.stringify({ username, password }),
     });
 
     if (response.ok) {
-      const session = await response.json();
-      setCookies("session", session, { path: "/" });
-
-      router.push("/");
-      return;
+      router.push("/login");
     } else {
-      setPassword("");
-      alert("올바르지 않은 계정입니다.");
+      alert("알 수 없는 오류가 발생했습니다.");
     }
   };
 
@@ -136,11 +131,11 @@ export default function Login() {
       <Image src={instagram} alt="screenshot" width={300} />
       <FormWrapper>
         <Title>정현스타그램</Title>
-        <Subtitle>로그인하기</Subtitle>
+        <Subtitle>새로운 계정 만들기</Subtitle>
         <Input value={username ?? ""} type="text" placeholder="이름" onChange={onUsernameChange} />
         <Input value={password ?? ""} type="password" placeholder="비밀번호" onChange={onPasswordChange} />
-        <Button onClick={onSubmit}>로그인</Button>
-        <RegisterLink href="/new">새로운 계정 만들기</RegisterLink>
+        <Button onClick={onSubmit}>회원가입</Button>
+        <RegisterLink href="/login">이미 계정이 있으신가요?</RegisterLink>
       </FormWrapper>
     </Container>
   );

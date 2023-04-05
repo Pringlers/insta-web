@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { DragDropFiles } from "./DragDropFiles";
 import { Modal } from "./Modal";
+import { IoClose } from "react-icons/io5";
 
 const PostButton = styled.button`
   padding: 14px 28px;
@@ -22,21 +23,25 @@ const PostButton = styled.button`
 `;
 
 const ModalWrapper = styled.div`
+  width: 40vw;
+  height: 60vh;
+
+  padding: 24px;
+
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 `;
 
 const TextInput = styled.input`
-  margin: 10px 0;
-  padding: 5px;
+  margin-top: 36px;
 
-  border: 1px solid gray;
-  border-radius: 5px;
+  width: 80%;
+
+  border: none;
   outline: none;
 
-  font-size: 16px;
+  font-size: 14px;
 `;
 
 const FileList = styled.ul`
@@ -45,29 +50,29 @@ const FileList = styled.ul`
   padding: 0;
 `;
 
-const FileItem = styled.li`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 5px 0;
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid lightgray;
-  font-size: 16px;
+const FilePreview = styled.img`
+  max-width: 400px;
 `;
 
 const RemoveButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   margin-left: 10px;
-  padding: 5px;
-  border-radius: 5px;
+  padding: 8px;
+
+  border-radius: 50%;
   border: none;
-  background-color: #e74c3c;
+
   color: white;
-  font-size: 16px;
+  background-color: #e74c3c;
+
+  font-size: 24px;
   cursor: pointer;
 `;
 
-export function FileUpload() {
+export function UploadFeed() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [caption, setCaption] = useState<string>("");
 
@@ -85,32 +90,35 @@ export function FileUpload() {
     }
 
     const formData = new FormData();
-    formData.append("username", "pringles");
     formData.append("caption", caption);
     selectedFiles.forEach((file, i) => {
       formData.append(`files[${i}]`, file);
     });
 
-    fetch("http://localhost:8000/posts", {
+    fetch("http://localhost:8000/feeds", {
       method: "POST",
       body: formData,
-    });
+    }).then(() => window.location.reload());
   };
 
   return (
     <Modal button={<PostButton>새로운 게시물 만들기</PostButton>}>
       <ModalWrapper>
-        <TextInput type="text" value={caption} onChange={handleCaptionInput} placeholder="Enter caption" />
         <DragDropFiles onFilesAdded={(files) => setSelectedFiles([...selectedFiles, ...files])} />
         <FileList>
-          {selectedFiles.map((file) => (
-            <FileItem key={file.name}>
-              {file.name}
-              <RemoveButton onClick={() => handleRemoveFile(file)}>삭제하기</RemoveButton>
-            </FileItem>
+          {selectedFiles.map((file, i) => (
+            <li key={i}>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <FilePreview src={URL.createObjectURL(file)} />
+                <RemoveButton onClick={() => handleRemoveFile(file)}>
+                  <IoClose />
+                </RemoveButton>
+              </div>
+            </li>
           ))}
         </FileList>
-        <button onClick={onSubmit} disabled={selectedFiles.length === 0}>
+        <TextInput type="text" value={caption} onChange={handleCaptionInput} placeholder="문구 입력..." />
+        <button onClick={onSubmit} disabled={!selectedFiles.length}>
           게시하기
         </button>
       </ModalWrapper>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styled from "@emotion/styled";
-import { FileUpload } from "@/components/PostForm";
+import { UploadFeed } from "@/components/UploadFeed";
 import { Feed } from "@/components/feed/Feed";
 import { useCookies } from "react-cookie";
 
@@ -27,18 +27,18 @@ const PostList = styled.ul`
 
 export default function Home() {
   const router = useRouter();
-  const [cookies] = useCookies(["token"]);
+  const [cookies] = useCookies(["session"]);
   const [posts, setPosts] = useState<Feed[]>([]);
 
   useEffect(() => {
-    if (!cookies.token) {
+    if (!cookies.session) {
       router.push("/login");
       return;
     }
 
-    fetch("http://localhost:8000/posts", {
+    fetch("http://localhost:8000/feeds", {
       headers: {
-        Authentication: cookies.token,
+        Authentication: cookies.session,
       },
     })
       .then((res) => res.json())
@@ -50,7 +50,7 @@ export default function Home() {
 
   return (
     <Container>
-      <FileUpload />
+      <UploadFeed />
       <PostList>
         {posts.map((feed) => (
           <li key={feed.id}>

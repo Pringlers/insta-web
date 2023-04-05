@@ -2,13 +2,17 @@ import React from "react";
 import styled from "@emotion/styled";
 
 const Container = styled.div`
-  padding: 24px 36px;
+  width: 80%;
+  height: 30%;
 
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
 
-  border: 2px dashed gray;
+  border: 2px solid gray;
+  border-radius: 14px;
+
+  font-size: 18px;
 `;
 
 export function DragDropFiles(props: { onFilesAdded: (files: File[]) => void }) {
@@ -24,7 +28,7 @@ export function DragDropFiles(props: { onFilesAdded: (files: File[]) => void }) 
 
   return (
     <Container onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}>
-      <p>드래그 앤 드롭으로 파일 추가하기</p>
+      <p>파일을 드래그 해서 업로드하기</p>
     </Container>
   );
 }
