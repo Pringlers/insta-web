@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 
 const Container = styled.div`
   width: 80%;
-  height: 30%;
+  min-height: 200px;
 
   display: flex;
   justify-content: center;

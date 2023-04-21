@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { DragDropFiles } from "./DragDropFiles";
 import { Modal } from "./Modal";
 import { IoClose } from "react-icons/io5";
+import { useCookies } from "react-cookie";
 
 const PostButton = styled.button`
   padding: 14px 28px;
@@ -31,6 +32,8 @@ const ModalWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  overflow-y: scroll;
 `;
 
 const TextInput = styled.input`
@@ -45,34 +48,63 @@ const TextInput = styled.input`
 `;
 
 const FileList = styled.ul`
-  list-style: none;
   margin: 10px;
   padding: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  list-style: none;
+`;
+
+const FilePreviewWrapper = styled.div`
+  position: relative;
+  width: 80%;
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: filter 0.2s ease-out;
+
+  & > img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  &:hover {
+    filter: blur(4px);
+
+    & > button {
+      opacity: 1;
+    }
+  }
+`;
+
+const RemoveButtonWrapper = styled.button`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 8px;
+  border-radius: 50%;
+  border: none;
+  color: white;
+  background-color: #e74c3c;
+  font-size: 24px;
+  cursor: pointer;
+  transition: opacity 0.2s ease-out;
+  opacity: 0;
 `;
 
 const FilePreview = styled.img`
-  max-width: 400px;
-`;
-
-const RemoveButton = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  margin-left: 10px;
-  padding: 8px;
-
-  border-radius: 50%;
-  border: none;
-
-  color: white;
-  background-color: #e74c3c;
-
-  font-size: 24px;
-  cursor: pointer;
+  width: 100%;
+  height: auto;
 `;
 
 export function UploadFeed() {
+  const [cookies] = useCookies(["session"]);
+
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [caption, setCaption] = useState<string>("");
 
@@ -97,6 +129,9 @@ export function UploadFeed() {
 
     fetch("http://localhost:8000/feeds", {
       method: "POST",
+      headers: {
+        Authentication: cookies.session,
+      },
       body: formData,
     }).then(() => window.location.reload());
   };
@@ -108,12 +143,12 @@ export function UploadFeed() {
         <FileList>
           {selectedFiles.map((file, i) => (
             <li key={i}>
-              <div style={{ display: "flex", alignItems: "center" }}>
+              <FilePreviewWrapper>
                 <FilePreview src={URL.createObjectURL(file)} />
-                <RemoveButton onClick={() => handleRemoveFile(file)}>
+                <RemoveButtonWrapper onClick={() => handleRemoveFile(file)}>
                   <IoClose />
-                </RemoveButton>
-              </div>
+                </RemoveButtonWrapper>
+              </FilePreviewWrapper>
             </li>
           ))}
         </FileList>
