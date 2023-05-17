@@ -4,14 +4,7 @@ import Carousel from "../Carousel";
 import { Caption } from "./Caption";
 import { Header } from "./Header";
 import { Comments } from "./Comments";
-
-export type Feed = {
-  id: number;
-  username: string;
-  caption: string;
-  image_count: number;
-  created_at: string;
-};
+import { FeedData } from "@/lib";
 
 const FeedWrapper = styled.div`
   width: 500px;
@@ -21,10 +14,10 @@ const ImageWrapper = styled.div`
   padding: 0 8px;
 `;
 
-export function Feed({ feed }: { feed: Feed }) {
+export function Feed({ feed }: { feed: FeedData }) {
   const images = Array.from(
     { length: feed.image_count },
-    (_, index) => `http://localhost:8000/images/${feed.id}/${index}`
+    (_, index) => `http://localhost:8000/feeds/${feed.id}/img/${index}`
   );
 
   return (

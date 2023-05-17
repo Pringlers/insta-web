@@ -4,6 +4,7 @@ import Image from "next/image";
 import styled from "@emotion/styled";
 import instagram from "@/public/instagram.png";
 import { useCookies } from "react-cookie";
+import { createUser, login } from "@/lib/account";
 
 const Container = styled.div`
   max-width: 1000px;
@@ -96,12 +97,12 @@ const RegisterLink = styled.a`
 export default function Login() {
   const router = useRouter();
 
-  const [cookies] = useCookies(["session"]);
+  const [cookies, setCookies] = useCookies(["session"]);
 
-  const [username, setUsername] = useState<string | null>(null);
+  const [username, setUsername] = useState<string>("");
   const onUsernameChange = (e: FormEvent<HTMLInputElement>) => setUsername(e.currentTarget.value);
 
-  const [password, setPassword] = useState<string | null>(null);
+  const [password, setPassword] = useState<string>("");
   const onPasswordChange = (e: FormEvent<HTMLInputElement>) => setPassword(e.currentTarget.value);
 
   useEffect(() => {
@@ -114,16 +115,21 @@ export default function Login() {
   const onSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:8000/users", {
-      method: "POST",
-      body: JSON.stringify({ username, password }),
-    });
-
-    if (response.ok) {
-      router.push("/login");
-    } else {
-      alert("알 수 없는 오류가 발생했습니다.");
+    const userCreated = await createUser({ username, password });
+    if (!userCreated) {
+      alert("이미 존재하는 아이디입니다.");
+      return;
     }
+
+    const session = await login({ username, password });
+    if (!session) {
+      alert("알 수 없는 오류가 발생했습니다.");
+      router.push("/login");
+      return;
+    }
+
+    setCookies("session", session, { path: "/" });
+    router.push("/");
   };
 
   return (

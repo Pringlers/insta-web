@@ -1,9 +1,10 @@
-import { MouseEvent, FormEvent, useState, useEffect } from "react";
+import { FormEvent, MouseEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import styled from "@emotion/styled";
-import instagram from "@/public/instagram.png";
 import { useCookies } from "react-cookie";
+import instagram from "@/public/instagram.png";
+import { login } from "@/lib/account";
 
 const Container = styled.div`
   max-width: 1000px;
@@ -98,10 +99,10 @@ export default function Login() {
 
   const [cookies, setCookies] = useCookies(["session"]);
 
-  const [username, setUsername] = useState<string | null>(null);
+  const [username, setUsername] = useState<string>("");
   const onUsernameChange = (e: FormEvent<HTMLInputElement>) => setUsername(e.currentTarget.value);
 
-  const [password, setPassword] = useState<string | null>(null);
+  const [password, setPassword] = useState<string>("");
   const onPasswordChange = (e: FormEvent<HTMLInputElement>) => setPassword(e.currentTarget.value);
 
   useEffect(() => {
@@ -114,21 +115,14 @@ export default function Login() {
   const onSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:8000/login", {
-      method: "POST",
-      body: JSON.stringify({ username, password }),
-    });
-
-    if (response.ok) {
-      const session = await response.json();
-      setCookies("session", session, { path: "/" });
-
-      router.push("/");
-      return;
-    } else {
-      setPassword("");
+    const session = await login({ username, password });
+    if (!session) {
       alert("올바르지 않은 계정입니다.");
+      return;
     }
+
+    setCookies("session", session, { path: "/" });
+    router.push("/");
   };
 
   return (

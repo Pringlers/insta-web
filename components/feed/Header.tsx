@@ -1,4 +1,6 @@
 import styled from "@emotion/styled";
+import { RiDeleteBin6Line as RecycleBin } from "react-icons/ri";
+import { getAvatarURL } from "@/lib";
 
 const HeaderWrapper = styled.div`
   padding: 8px;
@@ -26,16 +28,23 @@ const Username = styled.p`
   font-weight: bold;
 `;
 
-export function Header({ username }: { username: string }) {
-  const avatar = `http://localhost:8000/avatar/${username}`;
+const DeleteButton = styled.button`
+  color: red;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+`;
 
+export function Header({ username }: { username: string }) {
   return (
     <HeaderWrapper>
       <UserWrapper>
-        <UserAvatar src={avatar} alt="user avatar" />
+        <UserAvatar src={getAvatarURL(username)} />
         <Username>{username}</Username>
       </UserWrapper>
-      <div style={{ width: 12, height: 12, backgroundColor: "red" }}></div>
+      <DeleteButton>
+        <RecycleBin size={20} />
+      </DeleteButton>
     </HeaderWrapper>
   );
 }
