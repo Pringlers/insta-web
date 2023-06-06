@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { useCookies } from "react-cookie";
 import { Modal } from "../Modal";
 import { CommentArea } from "./CommentArea";
-import { Comment, FeedData, getComments, postComment } from "@/lib";
+import { Comment, FeedData, getAvatarURL, getComments, postComment } from "@/lib";
 
 const CommentContainer = styled.div`
   padding: 0 8px;
@@ -79,7 +79,7 @@ export function Comments({ feed }: CommentsProps) {
             {comments.map((comment) => (
               <li key={comment.id}>
                 <CommentCard>
-                  <CommentImage src={`http://localhost:8000/users/avatar/${comment.username}`} />
+                  <CommentImage src={getAvatarURL(comment.username)} />
                   <CommentContentWrapper>
                     <p>
                       <b>{comment.username}</b>

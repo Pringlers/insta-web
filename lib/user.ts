@@ -4,7 +4,7 @@ export type UserData = {
 };
 
 export function getSelfUser(session: string): Promise<UserData | null> {
-  return fetch("http://localhost:8000/users/@me", {
+  return fetch("http://jhstudent.kro.kr/api/users/@me", {
     headers: {
       Authentication: session,
     },
@@ -12,5 +12,5 @@ export function getSelfUser(session: string): Promise<UserData | null> {
 }
 
 export function getAvatarURL(username: string): string {
-  return `http://localhost:8000/users/avatar/${username}`;
+  return `http://jhstudent.kro.kr/api/users/avatar/${username}`;
 }

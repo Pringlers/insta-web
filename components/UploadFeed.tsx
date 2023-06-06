@@ -127,7 +127,7 @@ export function UploadFeed() {
       formData.append(`files[${i}]`, file);
     });
 
-    fetch("http://localhost:8000/feeds", {
+    fetch("http://jhstudent.kro.kr/api/feeds", {
       method: "POST",
       headers: {
         Authentication: cookies.session,
