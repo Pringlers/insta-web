@@ -7,7 +7,8 @@ import { Account } from "@/components/Account";
 import { Feeds } from "@/components/feed/Feeds";
 import { Notifications } from "@/components/notification/Notifications";
 import { UploadFeed } from "@/components/UploadFeed";
-import { FeedData, UserData, getFeeds, getSelfUser } from "@/lib";
+import { FeedData, UserData, getFeeds, getMeal, getSelfUser } from "@/lib";
+import { Meal } from "@/components/Meal";
 
 const Layout = styled.div`
   display: flex;
@@ -31,7 +32,7 @@ const UserContainer = styled.div`
   flex-direction: column;
 `;
 
-export default function Home() {
+export default function Home({ meal }: { meal: string }) {
   const router = useRouter();
   const [cookies] = useCookies(["session"]);
 
@@ -71,7 +72,13 @@ export default function Home() {
       <UserContainer>
         {user && <Account username={user.username} />}
         <Notifications notifications={notifications} />
+        <Meal meal={meal} />
       </UserContainer>
     </Layout>
   );
+}
+
+export async function getServerSideProps() {
+  const meal = await getMeal();
+  return { props: { meal } };
 }
