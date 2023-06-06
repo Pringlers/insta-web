@@ -8,6 +8,10 @@ const Header = styled.div`
   font-size: 24px;
 `;
 
+const Content = styled.p`
+  white-space: pre;
+`;
+
 export function Meal({ meal }: { meal: string }) {
   return (
     <div>
@@ -15,7 +19,7 @@ export function Meal({ meal }: { meal: string }) {
         <GiMeal />
         <p>오늘의 급식</p>
       </Header>
-      <p>{meal}</p>
+      <Content>{meal}</Content>
     </div>
   );
 }
