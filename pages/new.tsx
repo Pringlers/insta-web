@@ -115,6 +115,16 @@ export default function Login() {
   const onSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
+    if (username.length < 2) {
+      alert("이용자 이름은 최소한 두 글자여야 합니다.");
+      return;
+    }
+
+    if (password.length < 8) {
+      alert("비밀번호는 적어도 8글자 이상이어야 합니다.");
+      return;
+    }
+
     const userCreated = await createUser({ username, password });
     if (!userCreated) {
       alert("이미 존재하는 아이디입니다.");

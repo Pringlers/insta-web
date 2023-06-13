@@ -1,6 +1,10 @@
 import styled from "@emotion/styled";
 import { GiMeal } from "react-icons/gi";
 
+const Container = styled.div`
+  margin: 24px 0;
+`;
+
 const Header = styled.div`
   display: flex;
   align-items: center;
@@ -14,12 +18,12 @@ const Content = styled.p`
 
 export function Meal({ meal }: { meal: string }) {
   return (
-    <div>
+    <Container>
       <Header>
         <GiMeal />
         <p>오늘의 급식</p>
       </Header>
       <Content>{meal}</Content>
-    </div>
+    </Container>
   );
 }

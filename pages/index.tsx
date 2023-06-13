@@ -54,12 +54,16 @@ export default function Home({ meal }: { meal: string }) {
 
   const notifications = [
     {
-      title: "30105 김민석",
-      content: "뭐해? 자니??? 보고 싶어...",
+      title: "정현고등학교",
+      content: "6월 26일 (월) 1학기 2차 지필평가가 예정되어 있습니다.",
     },
     {
-      title: "윤희조 선생님",
-      content: "창의 융합 신청이 오늘까지니 빠르게 신청해 주세요.",
+      title: "대학 진학 도우미",
+      content: "6월 14일 (수) 오후 1시에 을지대학교 소개가 예정되어 있습니다.",
+    },
+    {
+      title: "코딩공작소",
+      content: "6월 14일 (수) 지난 주에 발표를 못한 학생은 발표 준비를 해주시기 바랍니다.",
     },
   ];
 
@@ -71,8 +75,8 @@ export default function Home({ meal }: { meal: string }) {
       </FeedsContainer>
       <UserContainer>
         {user && <Account username={user.username} />}
-        <Notifications notifications={notifications} />
         <Meal meal={meal} />
+        <Notifications notifications={notifications} />
       </UserContainer>
     </Layout>
   );
